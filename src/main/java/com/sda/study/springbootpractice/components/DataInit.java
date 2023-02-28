@@ -79,20 +79,27 @@ public class DataInit {
 
     private void initStudent() {
         System.out.println("Starting Student initialization...");
-        Student student = new Student();
-        student.setName("Kalle Kool");
-        student.setAge(68);
-        student.setGender(Gender.MALE);
-        student.setEmail("Kalle.Kool@mail.ee");
 
         try {
-            Student searchStudent = studentService.findStudentByName((student.getName()));
+            Course course = courseService.findCourseByName("Java fundamentals");
 
-        } catch (StudentNotFoundException e) {
-            studentService.createStudent(student);
+            Student student = new Student();
+            student.setName("Kalle Kool");
+            student.setAge(68);
+            student.setGender(Gender.MALE);
+            student.setEmail("Kalle.Kool@mail.ee");
+            student.setCourses(Collections.singletonList(course));
+
+            try {
+                Student searchStudent = studentService.findStudentByName(student.getName());
+                System.out.println("Cannot pre-initialize student: " + student.getName());
+            } catch (StudentNotFoundException e) {
+                studentService.createStudent(student);
+            }
+        } catch (CourseNotFoundException e) {
+            System.out.println("Cannot pre-initialize student! Reason:" + e.getLocalizedMessage());
         }
     }
-
         private void initTeacher() {
             System.out.println("Starting Teacher initialization...");
 
